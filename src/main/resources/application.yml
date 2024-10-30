@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: eBankify
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/master.yml
+server:
+  port: 8081
