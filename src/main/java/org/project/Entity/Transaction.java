@@ -20,5 +20,5 @@ public class Transaction {
     private Account sourceAccountId;
     @ManyToOne
     private Account destinationAccountId;
-    private TransactionStatus status;
+    private TransactionStatus status = TransactionStatus.PENDING;
 }

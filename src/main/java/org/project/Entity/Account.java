@@ -4,23 +4,27 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.project.Enum.AccountStatus;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
     private UUID id;
 
+    @Column(nullable = false, unique = true)
     private String accountNumber;
-    private double balance;
-    private Timestamp created_at;
-    private AccountStatus status;
+    private double balance = 0;
+    private LocalDateTime created_at = LocalDateTime.now();
+    private AccountStatus status = AccountStatus.ACTIVE;
 
     @ManyToOne
     private User owner;
