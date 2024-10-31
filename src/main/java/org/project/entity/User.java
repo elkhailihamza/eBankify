@@ -1,10 +1,9 @@
 package org.project.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.project.enums.Role;
+
+import java.util.List;
 
 @Entity
 public class User {
@@ -21,6 +20,15 @@ public class User {
     private double monthlyIncome;
     private int creditScore;
     private Role role;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Account> accounts;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Invoice> invoices;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Loan> loans;
 
     public User(Role role, int creditScore, double monthlyIncome, int age, String password, String email, String surname, String name, long id) {
         this.role = role;

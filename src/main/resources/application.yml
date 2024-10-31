@@ -1,12 +1,15 @@
 spring:
   application:
     name: eBankify
+
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:postgresql://localhost:5432/ebankify
+    username: root
+    password: ;(.314Luiv./
     driver-class-name: org.postgresql.Driver
+
   liquibase:
-    change-log: classpath:db/changelog/master.yml
+    change-log: classpath:db/master.yml
+
 server:
   port: 8081

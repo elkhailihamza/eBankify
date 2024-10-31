@@ -1,34 +1,36 @@
 package org.project.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.project.enums.AccountStatus;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String accountNumber;
     private double balance;
     private Timestamp created_at;
     private AccountStatus status;
 
+    @ManyToOne
+    private User owner;
+    @OneToMany(mappedBy = "sourceAccountId")
+    private List<Transaction> sentTransactions;
+    @OneToMany(mappedBy = "destinationAccountId")
+    private List<Transaction> receivedTransactions;
 
-    private long userId;
-
-    public Account(UUID id, String accountNumber, double balance, Timestamp created_at, AccountStatus status, long userId) {
+    public Account(UUID id, String accountNumber, double balance, Timestamp created_at, AccountStatus status, User owner) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.created_at = created_at;
         this.status = status;
-        this.userId = userId;
+        this.owner = owner;
     }
 
     public Account() {}
@@ -73,11 +75,27 @@ public class Account {
         this.status = status;
     }
 
-    public long getUserId() {
-        return userId;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public List<Transaction> getSentTransactions() {
+        return sentTransactions;
+    }
+
+    public void setSentTransactions(List<Transaction> sentTransactions) {
+        this.sentTransactions = sentTransactions;
+    }
+
+    public List<Transaction> getReceivedTransactions() {
+        return receivedTransactions;
+    }
+
+    public void setReceivedTransactions(List<Transaction> receivedTransactions) {
+        this.receivedTransactions = receivedTransactions;
     }
 }
