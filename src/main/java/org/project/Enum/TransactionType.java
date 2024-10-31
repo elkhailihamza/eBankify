@@ -1,4 +1,4 @@
-package org.project.enums;
+package org.project.Enum;
 
 public enum TransactionType {
     STANDARD,
