@@ -2,12 +2,14 @@ package org.project.Service;
 
 import org.project.Dao.AccountDao;
 import org.project.Dao.UserDao;
+import org.project.Dto.AccountDto.AccountCreateDto;
+import org.project.Dto.AccountDto.AccountViewDto;
+import org.project.Dto.Mapper.AccountMapper;
 import org.project.Entity.Account;
 import org.project.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -21,15 +23,26 @@ public class AccountService {
         this.userDao = userDao;
     }
 
-    public Account createNewAccount(User user) {
-        String accountNumber = getUniqueAccountNum(17);
+    public Account toAccount(AccountCreateDto accountCreateDto) {
+        return AccountMapper.INSTANCE.toAccount(accountCreateDto);
+    }
 
-        Account account = Account.builder()
-                .accountNumber(accountNumber)
-                .owner(user)
-                .build();
+    public AccountCreateDto getAccountToAccountCreateDto(Account account) {
+        return AccountMapper.INSTANCE.getAccountToAccountCreateDto(account);
+    }
 
-        return accountDao.save(account);
+    public AccountViewDto getAccountToAccountViewDto(Account account) {
+        return AccountMapper.INSTANCE.getAccountToAccountViewDto(account);
+    }
+
+    public AccountViewDto createAccount(Account newAccount, int accountNumLength) {
+        String accountNumber = getUniqueAccountNum(accountNumLength);
+
+        newAccount.setAccountNumber(accountNumber);
+
+        newAccount = accountDao.save(newAccount);
+
+        return getAccountToAccountViewDto(newAccount);
     }
 
     private String generateAccountNum(int length) {

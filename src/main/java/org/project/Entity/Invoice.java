@@ -19,6 +19,13 @@ public class Invoice {
     private String amountDue;
     private LocalDateTime dueDate = LocalDateTime.now().plusDays(3);
 
+    @PrePersist
+    public void prePersist() {
+        if (dueDate == null) {
+            dueDate = LocalDateTime.now().plusDays(3);
+        }
+    }
+
     @ManyToOne
     private User owner;
 }

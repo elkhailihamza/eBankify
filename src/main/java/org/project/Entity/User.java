@@ -33,6 +33,8 @@ public class User {
     private int age;
     private double monthlyIncome = 0;
     private int creditScore = 0;
+
+    @Column(nullable = false, columnDefinition = "SMALLINT DEFAULT 2")
     private Role role = Role.USER;
 
     @OneToMany(mappedBy = "owner")

@@ -24,16 +24,8 @@ public class AuthService {
         this.userDao = userDao;
     }
 
-    public LoginDto getUserToLoginDto(User user) {
-        return UserMapper.INSTANCE.userToLoginDto(user);
-    }
-
     public User getLoginDtoToUser(LoginDto loginDto) {
         return UserMapper.INSTANCE.loginDtoToUser(loginDto);
-    }
-
-    public RegisterDto getUserToRegisterDto(User user) {
-        return UserMapper.INSTANCE.userToRegisterDto(user);
     }
 
     public User getRegisterDtoToUser(RegisterDto registerDto) {
@@ -41,8 +33,9 @@ public class AuthService {
     }
 
     public String register(User user) {
-        Optional<User> existingUser = userDao.findUserByEmail(user.getEmail());
-        if (existingUser.isEmpty()) {
+        String email = user.getEmail();
+        boolean userExists = userDao.existsUserByEmail(email);
+        if (!userExists) {
             String hashedPass = HashKeyword.hash(user.getPassword(), 10);
             user.setPassword(hashedPass);
             user.setRole(Role.USER);

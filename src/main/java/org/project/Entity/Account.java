@@ -24,11 +24,24 @@ public class Account {
     @Column(nullable = false, unique = true)
     private String accountNumber;
     private double balance = 0;
-    private LocalDateTime created_at = LocalDateTime.now();
-    private AccountStatus status = AccountStatus.ACTIVE;
+
+    private LocalDateTime created_at;
+
+    @Column(nullable = false, columnDefinition = "SMALLINT DEFAULT 1")
+    private AccountStatus status;
+
+    @PrePersist
+    public void prePersist() {
+        if (created_at == null) {
+            created_at = LocalDateTime.now();
+        }
+
+        if (status == null) {
+            status = AccountStatus.ACTIVE;
+        }
+    }
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User owner;
     @OneToMany(mappedBy = "sourceAccount")
     private List<Transaction> sentTransactions;

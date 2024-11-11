@@ -23,5 +23,6 @@ public class Transaction {
     private Account sourceAccount;
     @ManyToOne
     private Account destinationAccount;
+    @Column(nullable = false, columnDefinition = "SMALLINT DEFAULT 1")
     private TransactionStatus status = TransactionStatus.PENDING;
 }
