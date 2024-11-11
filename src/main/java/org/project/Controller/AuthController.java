@@ -1,20 +1,36 @@
 package org.project.Controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.project.Dto.AuthDto.LoginDto;
+import org.project.Dto.AuthDto.RegisterDto;
+import org.project.Entity.User;
+import org.project.Enum.Role;
+import org.project.Service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @GetMapping("/login")
-    public String loginView() {
-        return "login";
+    private final AuthService authService;
+
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
-    @GetMapping("/register")
-    public String registerView() {
-        return "register";
+    @PostMapping("/login")
+    @ResponseBody
+    public String login(@RequestBody LoginDto loginDto) {
+        User user = authService.getLoginDtoToUser(loginDto);
+        return authService.login(user);
+    }
+
+    @PostMapping("/register")
+    @ResponseBody
+    public String register(@RequestBody RegisterDto registerDto) {
+        User user = authService.getRegisterDtoToUser(registerDto);
+        user.setRole(Role.USER);
+        return authService.register(user);
     }
 }

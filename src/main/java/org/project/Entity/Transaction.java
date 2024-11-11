@@ -1,14 +1,17 @@
 package org.project.Entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.project.Enum.TransactionStatus;
 import org.project.Enum.TransactionType;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "transaction")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +20,8 @@ public class Transaction {
     private double amount;
 
     @ManyToOne
-    private Account sourceAccountId;
+    private Account sourceAccount;
     @ManyToOne
-    private Account destinationAccountId;
+    private Account destinationAccount;
     private TransactionStatus status = TransactionStatus.PENDING;
 }

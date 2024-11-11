@@ -21,20 +21,15 @@ public class AccountService {
         this.userDao = userDao;
     }
 
-    public Account createNewAccount(long user_id) {
-        Optional<User> user = userDao.findById(user_id);
-        if (user.isPresent()) {
-           String accountNumber = getUniqueAccountNum(17);
+    public Account createNewAccount(User user) {
+        String accountNumber = getUniqueAccountNum(17);
 
-            Account account = Account.builder()
-                    .accountNumber(accountNumber)
-                    .owner(user.get())
-                    .build();
+        Account account = Account.builder()
+                .accountNumber(accountNumber)
+                .owner(user)
+                .build();
 
-            return accountDao.save(account);
-        }
-
-        return null;
+        return accountDao.save(account);
     }
 
     private String generateAccountNum(int length) {

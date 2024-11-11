@@ -11,9 +11,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "account")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,9 +28,10 @@ public class Account {
     private AccountStatus status = AccountStatus.ACTIVE;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User owner;
-    @OneToMany(mappedBy = "sourceAccountId")
+    @OneToMany(mappedBy = "sourceAccount")
     private List<Transaction> sentTransactions;
-    @OneToMany(mappedBy = "destinationAccountId")
+    @OneToMany(mappedBy = "destinationAccount")
     private List<Transaction> receivedTransactions;
 }
