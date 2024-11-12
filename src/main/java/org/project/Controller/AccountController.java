@@ -56,21 +56,16 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Doesn't exist!");
     }
 
-//    @PostMapping("/{accountNumber}/disable")
-//    public ResponseEntity<?> disableAccount(@PathVariable String accountNumber) {
-//        Optional<User> requester = userService.findUserById(requesterId);
-//        if (requester.isPresent() && requester.get().getRole() == Role.ADMIN) {
-//            Optional<Account> account = accountService.fetchAccountByAccountNumber(accountNumber);
-//            if (account.isPresent()) {
-//                Account foundAccount = account.get();
-//                foundAccount.setStatus(AccountStatus.BLOCKED);
-//                accountService.saveAccount(foundAccount);
-//
-//                return ResponseEntity.ok("Account - "+accountNumber+" Blocked!");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requested account not found!");
-//            }
-//        }
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
-//    }
+    @PostMapping("/{accountNumber}/disable")
+    public ResponseEntity<?> disableAccount(@PathVariable String accountNumber) {
+        Optional<Account> account = accountService.fetchAccountByAccountNumber(accountNumber);
+        if (account.isPresent()) {
+            Account foundAccount = account.get();
+            foundAccount.setStatus(AccountStatus.BLOCKED);
+            accountService.saveAccount(foundAccount);
+
+            return ResponseEntity.ok("Account - "+accountNumber+" Blocked!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account specified not found!");
+    }
 }
