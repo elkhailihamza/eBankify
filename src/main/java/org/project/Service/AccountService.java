@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -34,6 +35,10 @@ public class AccountService {
 
     public AccountResDto getAccountToAccountResDto(Account account) {
         return AccountMapper.INSTANCE.getAccountToAccountViewDto(account);
+    }
+
+    public Account saveAccount(Account account) {
+        return accountDao.save(account);
     }
 
     public Account createAccount(Account newAccount, int accountNumLength) {
@@ -61,12 +66,20 @@ public class AccountService {
 
         do {
             accountNum = generateAccountNum(length);
-        } while(accountDao.existsAccountByAccountNumber(accountNum));
+        } while(accountExistsByAccountNumber(accountNum));
 
         return accountNum;
     }
 
     public List<Account> fetchAllUserAccounts(User owner) {
         return accountDao.findAccountsByOwner(owner);
+    }
+
+    public boolean accountExistsByAccountNumber(String accountNumber) {
+        return accountDao.existsAccountByAccountNumber(accountNumber);
+    }
+
+    public Optional<Account> fetchAccountByAccountNumber(String accountNumber) {
+        return accountDao.findAccountByAccountNumber(accountNumber);
     }
 }

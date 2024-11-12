@@ -3,6 +3,8 @@ package org.project.Controller;
 import org.project.Dto.request.AccountReqDto;
 import org.project.Entity.Account;
 import org.project.Entity.User;
+import org.project.Enum.AccountStatus;
+import org.project.Enum.Role;
 import org.project.Service.AccountService;
 import org.project.Service.UserService;
 import org.project.viewmodel.AccountViewModel;
@@ -53,4 +55,22 @@ public class AccountController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Doesn't exist!");
     }
+
+//    @PostMapping("/{accountNumber}/disable")
+//    public ResponseEntity<?> disableAccount(@PathVariable String accountNumber) {
+//        Optional<User> requester = userService.findUserById(requesterId);
+//        if (requester.isPresent() && requester.get().getRole() == Role.ADMIN) {
+//            Optional<Account> account = accountService.fetchAccountByAccountNumber(accountNumber);
+//            if (account.isPresent()) {
+//                Account foundAccount = account.get();
+//                foundAccount.setStatus(AccountStatus.BLOCKED);
+//                accountService.saveAccount(foundAccount);
+//
+//                return ResponseEntity.ok("Account - "+accountNumber+" Blocked!");
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Requested account not found!");
+//            }
+//        }
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+//    }
 }
