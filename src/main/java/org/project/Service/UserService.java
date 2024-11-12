@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -15,6 +16,10 @@ public class UserService {
     @Autowired
     public UserService(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    public Optional<User> findUserById(long id) {
+        return userDao.findById(id);
     }
 
     public List<User> fetchAllUsers() {
@@ -27,5 +32,9 @@ public class UserService {
 
     public void deleteUser(User user) {
         userDao.delete(user);
+    }
+
+    public boolean userExistsById(long id) {
+        return userDao.existsById(id);
     }
 }

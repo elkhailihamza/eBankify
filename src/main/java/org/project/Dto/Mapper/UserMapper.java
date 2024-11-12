@@ -2,8 +2,8 @@ package org.project.Dto.Mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.project.Dto.AuthDto.LoginDto;
-import org.project.Dto.AuthDto.RegisterDto;
+import org.project.Dto.request.AuthDto.LoginDto;
+import org.project.Dto.request.AuthDto.RegisterDto;
 import org.project.Entity.User;
 
 @Mapper

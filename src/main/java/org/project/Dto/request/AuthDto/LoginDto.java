@@ -1,4 +1,4 @@
-package org.project.Dto.AuthDto;
+package org.project.Dto.request.AuthDto;
 
 import lombok.Data;
 

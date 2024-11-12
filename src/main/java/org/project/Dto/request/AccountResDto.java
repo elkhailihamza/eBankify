@@ -1,11 +1,11 @@
-package org.project.Dto.AccountDto;
+package org.project.Dto.request;
 
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import org.project.Entity.User;
 
 @Data
-public class AccountCreateDto {
+public class AccountResDto {
     @ManyToOne
     private User owner;
 }
