@@ -1,10 +1,10 @@
 package org.project.Controller;
 
 import org.project.Dto.request.AccountReqDto;
+import org.project.Dto.response.AccountResDto;
 import org.project.Entity.Account;
 import org.project.Entity.User;
 import org.project.Enum.AccountStatus;
-import org.project.Enum.Role;
 import org.project.Service.AccountService;
 import org.project.Service.UserService;
 import org.project.viewmodel.AccountViewModel;
@@ -67,5 +67,15 @@ public class AccountController {
             return ResponseEntity.ok("Account - "+accountNumber+" Blocked!");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account specified not found!");
+    }
+
+    @GetMapping("/{accountNumber}/view")
+    public ResponseEntity<?> viewCertainAccount(@PathVariable String accountNumber) {
+        Optional<Account> account = accountService.fetchAccountByAccountNumber(accountNumber);
+        if (account.isPresent()) {
+            AccountResDto accountResDto = accountService.getAccountToAccountResDto(account.get());
+            return ResponseEntity.ok(new AccountViewModel(accountResDto));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found!");
     }
 }
