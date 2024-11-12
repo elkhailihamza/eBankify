@@ -5,7 +5,7 @@ import lombok.Data;
 import org.project.Entity.User;
 
 @Data
-public class AccountResDto {
+public class AccountReqDto {
     @ManyToOne
     private User owner;
 }

@@ -2,8 +2,8 @@ package org.project.Service;
 
 import org.project.Dao.AccountDao;
 import org.project.Dao.UserDao;
-import org.project.Dto.request.AccountResDto;
-import org.project.Dto.response.AccountReqDto;
+import org.project.Dto.request.AccountReqDto;
+import org.project.Dto.response.AccountResDto;
 import org.project.Dto.Mapper.AccountMapper;
 import org.project.Entity.Account;
 import org.project.Entity.User;
@@ -24,26 +24,26 @@ public class AccountService {
         this.userDao = userDao;
     }
 
-    public Account toAccount(AccountResDto accountResDto) {
-        return AccountMapper.INSTANCE.toAccount(accountResDto);
+    public Account toAccount(AccountReqDto accountReqDto) {
+        return AccountMapper.INSTANCE.toAccount(accountReqDto);
     }
 
-    public AccountResDto getAccountToAccountCreateDto(Account account) {
+    public AccountReqDto getAccountToAccountReqDto(Account account) {
         return AccountMapper.INSTANCE.getAccountToAccountCreateDto(account);
     }
 
-    public AccountReqDto getAccountToAccountViewDto(Account account) {
+    public AccountResDto getAccountToAccountResDto(Account account) {
         return AccountMapper.INSTANCE.getAccountToAccountViewDto(account);
     }
 
-    public AccountReqDto createAccount(Account newAccount, int accountNumLength) {
+    public AccountResDto createAccount(Account newAccount, int accountNumLength) {
         String accountNumber = getUniqueAccountNum(accountNumLength);
 
         newAccount.setAccountNumber(accountNumber);
 
         newAccount = accountDao.save(newAccount);
 
-        return getAccountToAccountViewDto(newAccount);
+        return getAccountToAccountResDto(newAccount);
     }
 
     private String generateAccountNum(int length) {

@@ -1,11 +1,13 @@
 package org.project.Controller;
 
-import org.project.Dto.request.AccountResDto;
-import org.project.Dto.response.AccountReqDto;
+import org.project.Dto.request.AccountReqDto;
+import org.project.Dto.response.AccountResDto;
 import org.project.Entity.Account;
 import org.project.Entity.User;
 import org.project.Service.AccountService;
 import org.project.Service.UserService;
+import org.project.viewmodel.AccountViewModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +26,22 @@ public class AccountController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> viewUserAccounts(@RequestBody AccountResDto accountResDto) {
-        User owner = accountResDto.getOwner();
+    public ResponseEntity<?> viewUserAccounts(@RequestBody AccountReqDto accountReqDto) {
+        User owner = accountReqDto.getOwner();
         List<Account> userAccounts = accountService.fetchAllUserAccounts(owner);
         if (!userAccounts.isEmpty()) {
-            return null;
+            List<AccountViewModel> accountViewModels = userAccounts.stream()
+                    .map(accountService::getAccountToAccountResDto)
+                    .map(AccountViewModel::new).toList();
+            return ResponseEntity.ok(accountViewModels);
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No accounts found!");
     }
 
     @PostMapping("/create")
     @ResponseBody
-    public String createNewAccount(@RequestBody AccountResDto accountResDto) {
-        Optional<User> user = userService.findUserById(accountResDto.getOwner().getId());
+    public String createNewAccount(@RequestBody AccountReqDto accountReqDto) {
+        Optional<User> user = userService.findUserById(accountReqDto.getOwner().getId());
         if (user.isPresent()) {
             User existingUser = user.get();
             int creditScore = existingUser.getCreditScore();
@@ -44,8 +49,8 @@ public class AccountController {
                 return "Credit Score too low! \nNeeds to be 600 or more.";
             }
 
-            Account newAccount = accountService.toAccount(accountResDto);
-            AccountReqDto accountViewDto = accountService.createAccount(newAccount, 16);
+            Account newAccount = accountService.toAccount(accountReqDto);
+            AccountResDto accountViewDto = accountService.createAccount(newAccount, 16);
             return accountViewDto.toString();
         }
         return "User Doesn't exist!";

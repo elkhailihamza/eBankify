@@ -2,17 +2,17 @@ package org.project.Dto.Mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.project.Dto.request.AccountResDto;
-import org.project.Dto.response.AccountReqDto;
+import org.project.Dto.request.AccountReqDto;
+import org.project.Dto.response.AccountResDto;
 import org.project.Entity.Account;
 
 @Mapper
 public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-    Account toAccount(AccountResDto accountResDto);
     Account toAccount(AccountReqDto accountReqDto);
+    Account toAccount(AccountResDto accountResDto);
 
-    AccountResDto getAccountToAccountCreateDto(Account account);
-    AccountReqDto getAccountToAccountViewDto(Account account);
+    AccountReqDto getAccountToAccountCreateDto(Account account);
+    AccountResDto getAccountToAccountViewDto(Account account);
 }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class AccountReqDto {
+public class AccountResDto {
     private UUID id;
     private String accountNumber;
     private double balance;
