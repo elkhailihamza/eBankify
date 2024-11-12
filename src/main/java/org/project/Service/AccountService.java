@@ -36,14 +36,12 @@ public class AccountService {
         return AccountMapper.INSTANCE.getAccountToAccountViewDto(account);
     }
 
-    public AccountResDto createAccount(Account newAccount, int accountNumLength) {
+    public Account createAccount(Account newAccount, int accountNumLength) {
         String accountNumber = getUniqueAccountNum(accountNumLength);
 
         newAccount.setAccountNumber(accountNumber);
 
-        newAccount = accountDao.save(newAccount);
-
-        return getAccountToAccountResDto(newAccount);
+        return accountDao.save(newAccount);
     }
 
     private String generateAccountNum(int length) {

@@ -1,7 +1,6 @@
 package org.project.Controller;
 
 import org.project.Dto.request.AccountReqDto;
-import org.project.Dto.response.AccountResDto;
 import org.project.Entity.Account;
 import org.project.Entity.User;
 import org.project.Service.AccountService;
@@ -39,20 +38,19 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    @ResponseBody
-    public String createNewAccount(@RequestBody AccountReqDto accountReqDto) {
+    public ResponseEntity<?> createNewAccount(@RequestBody AccountReqDto accountReqDto) {
         Optional<User> user = userService.findUserById(accountReqDto.getOwner().getId());
         if (user.isPresent()) {
             User existingUser = user.get();
             int creditScore = existingUser.getCreditScore();
             if (creditScore < 600) {
-                return "Credit Score too low! \nNeeds to be 600 or more.";
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Credit Score too low! \nNeeds to be 600 or more.");
             }
 
-            Account newAccount = accountService.toAccount(accountReqDto);
-            AccountResDto accountViewDto = accountService.createAccount(newAccount, 16);
-            return accountViewDto.toString();
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new AccountViewModel(accountService.getAccountToAccountResDto(
+                            accountService.createAccount(accountService.toAccount(accountReqDto), 16))));
         }
-        return "User Doesn't exist!";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Doesn't exist!");
     }
 }
