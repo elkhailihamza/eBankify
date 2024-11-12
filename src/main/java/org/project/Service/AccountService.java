@@ -1,7 +1,6 @@
 package org.project.Service;
 
 import org.project.Dao.AccountDao;
-import org.project.Dao.UserDao;
 import org.project.Dto.request.AccountReqDto;
 import org.project.Dto.response.AccountResDto;
 import org.project.Dto.Mapper.AccountMapper;
@@ -17,12 +16,10 @@ import java.util.Random;
 @Service
 public class AccountService {
     private final AccountDao accountDao;
-    private final UserDao userDao;
 
     @Autowired
-    public AccountService(AccountDao accountDao, UserDao userDao) {
+    public AccountService(AccountDao accountDao) {
         this.accountDao = accountDao;
-        this.userDao = userDao;
     }
 
     public Account toAccount(AccountReqDto accountReqDto) {
@@ -39,6 +36,10 @@ public class AccountService {
 
     public Account saveAccount(Account account) {
         return accountDao.save(account);
+    }
+
+    public void deleteAccount(Account account) {
+        accountDao.delete(account);
     }
 
     public Account createAccount(Account newAccount, int accountNumLength) {

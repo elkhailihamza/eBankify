@@ -78,4 +78,14 @@ public class AccountController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found!");
     }
+
+    @PostMapping("/{accountNumber}/delete")
+    public ResponseEntity<String> deleteAccount(@PathVariable String accountNumber) {
+        Optional<Account> account = accountService.fetchAccountByAccountNumber(accountNumber);
+        if (account.isPresent()) {
+            accountService.deleteAccount(account.get());
+            return ResponseEntity.ok("Successfully deleted account!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found!");
+    }
 }
