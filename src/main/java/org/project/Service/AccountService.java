@@ -34,8 +34,8 @@ public class AccountService {
         return AccountMapper.INSTANCE.getAccountToAccountViewDto(account);
     }
 
-    public Account saveAccount(Account account) {
-        return accountDao.save(account);
+    public void saveAccount(Account account) {
+        accountDao.save(account);
     }
 
     public void deleteAccount(Account account) {

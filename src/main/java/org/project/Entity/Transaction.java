@@ -16,6 +16,8 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
     private TransactionType type;
     private double amount;
 

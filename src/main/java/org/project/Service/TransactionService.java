@@ -1,6 +1,9 @@
 package org.project.Service;
 
 import org.project.Dao.TransactionDao;
+import org.project.Dto.Mapper.TransactionMapper;
+import org.project.Dto.request.TransactionReqDto;
+import org.project.Dto.response.TransactionResDto;
 import org.project.Entity.Account;
 import org.project.Entity.Transaction;
 import org.project.Entity.User;
@@ -20,6 +23,18 @@ public class TransactionService {
         this.transactionDao = transactionDao;
     }
 
+    public Transaction toTransaction(TransactionResDto transactionResDto) {
+        return TransactionMapper.INSTANCE.toTransaction(transactionResDto);
+    }
+
+    public TransactionResDto getTransactionToTransactionResDto(Transaction transaction) {
+        return TransactionMapper.INSTANCE.getTransactionToTransactionResDto(transaction);
+    }
+
+    public TransactionReqDto getTransactionToTransactionReqDto(Transaction transaction) {
+        return TransactionMapper.INSTANCE.getTransactionToTransactionReqDto(transaction);
+    }
+
     public Transaction createTransaction(Account source, Account destination, double amount, TransactionType transactionType) {
         Transaction transaction = Transaction.builder()
                 .type(transactionType)
@@ -31,7 +46,7 @@ public class TransactionService {
         return transactionDao.save(transaction);
     }
 
-    public List<Transaction> getTransactionHistory(User user) {
-        return transactionDao.findBySourceAccount_Owner_Id(user.getId());
+    public List<Transaction> getUserTransactionHistory(User user) {
+        return transactionDao.findTransactionsBySourceAccount_Owner(user);
     }
 }
