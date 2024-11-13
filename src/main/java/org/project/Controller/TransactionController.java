@@ -60,8 +60,35 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("An error has occurred!");
     }
 
+    @PostMapping("/{transactionId}/accept")
+    public ResponseEntity<?> acceptTransaction(@PathVariable long transactionId) {
+        Optional<Transaction> transactionOpt = transactionService.findTransactionById(transactionId);
+        if (transactionOpt.isPresent()) {
+            Transaction transaction = transactionOpt.get();
+            transaction.getSourceAccount().setBalance(transaction.getSourceAccount().getBalance() - transaction.getAmount());
+            transaction.getDestinationAccount().setBalance(transaction.getDestinationAccount().getBalance() + transaction.getAmount());
+            transaction.setStatus(TransactionStatus.ACCEPTED);
+            transactionService.saveTransaction(transaction);
+            return ResponseEntity.ok("Transaction accepted!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not found!");
+    }
+
+    @PostMapping("/{transactionId}/refuse")
+    public ResponseEntity<?> refuseTransaction(@PathVariable long transactionId) {
+        Optional<Transaction> transactionOpt = transactionService.findTransactionById(transactionId);
+        if (transactionOpt.isPresent()) {
+            Transaction transaction = transactionOpt.get();
+            transaction.setStatus(TransactionStatus.REFUSED);
+            transactionService.saveTransaction(transaction);
+            return ResponseEntity.ok("Transaction refused!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not found!");
+    }
+
     @GetMapping("/")
     public ResponseEntity<?> getUserTransactionHistory() {
+
         return null;
     }
 }
