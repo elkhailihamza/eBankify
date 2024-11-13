@@ -24,7 +24,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         User user = authService.getLoginDtoToUser(loginDto);
-        return authService.login(user, request.getSession());
+        return authService.login(user, request.getSession(true));
     }
 
     @PostMapping("/register")
