@@ -55,7 +55,7 @@ public class AuthService {
         if (existingUser.isPresent()) {
             String hashedPassword = existingUser.get().getPassword();
             if (HashKeyword.check(user.getPassword(), hashedPassword)) {
-                session.setAttribute("AUTH.id", user.getId());
+                session.setAttribute("AUTH.id", existingUser.get().getId());
                 return ResponseEntity.ok("User Logged in successfully!");
             }
         }
