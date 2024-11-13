@@ -1,5 +1,6 @@
 package org.project.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.project.Dto.request.AccountReqDto;
 import org.project.Dto.response.AccountResDto;
 import org.project.Entity.Account;
@@ -27,21 +28,26 @@ public class AccountController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> viewUserAccounts(@RequestBody AccountReqDto accountReqDto) {
-        User owner = accountReqDto.getOwner();
-        List<Account> userAccounts = accountService.fetchAllUserAccounts(owner);
-        if (!userAccounts.isEmpty()) {
-            List<AccountViewModel> accountViewModels = userAccounts.stream()
-                    .map(accountService::getAccountToAccountResDto)
-                    .map(AccountViewModel::new).toList();
-            return ResponseEntity.ok(accountViewModels);
+    public ResponseEntity<?> viewUserAccounts(HttpServletRequest request) {
+        Long userId = (Long) request.getSession().getAttribute("AUTH.id");
+        Optional<User> owner = userService.findUserById(userId);
+        if (owner.isPresent()) {
+            List<Account> userAccounts = accountService.fetchAllUserAccounts(owner.get());
+            if (!userAccounts.isEmpty()) {
+                List<AccountViewModel> accountViewModels = userAccounts.stream()
+                        .map(accountService::getAccountToAccountResDto)
+                        .map(AccountViewModel::new).toList();
+                return ResponseEntity.ok(accountViewModels);
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No accounts found!");
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createNewAccount(@RequestBody AccountReqDto accountReqDto) {
-        Optional<User> user = userService.findUserById(accountReqDto.getOwner().getId());
+    public ResponseEntity<?> createNewAccount(HttpServletRequest request) {
+        Long userId = (Long) request.getSession().getAttribute("AUTH.id");
+        Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
             User existingUser = user.get();
             int creditScore = existingUser.getCreditScore();
@@ -51,7 +57,7 @@ public class AccountController {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new AccountViewModel(accountService.getAccountToAccountResDto(
-                            accountService.createAccount(accountService.toAccount(accountReqDto), 16))));
+                            accountService.createAccount(new Account(), 16))));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Doesn't exist!");
     }
