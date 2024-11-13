@@ -47,6 +47,6 @@ public class TransactionService {
     }
 
     public List<Transaction> getUserTransactionHistory(User user) {
-        return transactionDao.findTransactionsBySourceAccount_Owner(user);
+        return transactionDao.findUserTransactionHistory(user);
     }
 }

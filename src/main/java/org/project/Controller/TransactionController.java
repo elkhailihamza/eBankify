@@ -3,17 +3,22 @@ package org.project.Controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.project.Dto.request.TransactionReqDto;
+import org.project.Dto.response.TransactionResDto;
 import org.project.Entity.Account;
 import org.project.Entity.Transaction;
+import org.project.Entity.User;
 import org.project.Enum.AccountStatus;
 import org.project.Enum.TransactionStatus;
 import org.project.Service.AccountService;
 import org.project.Service.TransactionService;
+import org.project.Service.UserService;
+import org.project.viewmodel.TransactionViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,11 +26,13 @@ import java.util.Optional;
 public class TransactionController {
     private final TransactionService transactionService;
     private final AccountService accountService;
+    private final UserService userService;
 
     @Autowired
-    public TransactionController(TransactionService transactionService, AccountService accountService) {
+    public TransactionController(TransactionService transactionService, AccountService accountService, UserService userService) {
         this.transactionService = transactionService;
         this.accountService = accountService;
+        this.userService = userService;
     }
 
     @PostMapping("/create")
@@ -87,8 +94,22 @@ public class TransactionController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getUserTransactionHistory() {
+    public ResponseEntity<?> getUserTransactionHistory(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Long userId = (Long) session.getAttribute("AUTH.id");
+        Optional<User> userOpt = userService.findUserById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            List<Transaction> transactionHistory = transactionService.getUserTransactionHistory(user);
+            if (!transactionHistory.isEmpty()) {
+                List<TransactionViewModel> transactionVMList = transactionHistory.stream()
+                        .map(transactionService::getTransactionToTransactionResDto)
+                        .map(TransactionViewModel::new).toList();
 
-        return null;
+                return ResponseEntity.ok(transactionVMList);
+            }
+            return ResponseEntity.ok("Transaction history is empty!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
     }
 }
