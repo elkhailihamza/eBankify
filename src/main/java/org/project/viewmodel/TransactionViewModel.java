@@ -7,6 +7,7 @@ import org.project.Dto.response.TransactionResDto;
 @Getter
 @NoArgsConstructor
 public class TransactionViewModel {
+    private long id;
     private String type;
     private double amount;
     private String accountSrcNumber;
@@ -14,6 +15,7 @@ public class TransactionViewModel {
     private String status;
 
     public TransactionViewModel(TransactionResDto transactionResDto) {
+        this.id= transactionResDto.getId();
         this.type = transactionResDto.getType().name();
         this.amount = transactionResDto.getAmount();
         this.accountSrcNumber = transactionResDto.getSourceAccount().getAccountNumber();
