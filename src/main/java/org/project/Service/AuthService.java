@@ -1,5 +1,7 @@
 package org.project.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.project.Dao.UserDao;
 import org.project.Dto.request.AuthDto.LoginDto;
 import org.project.Dto.request.AuthDto.RegisterDto;
@@ -48,11 +50,12 @@ public class AuthService {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists!");
     }
 
-    public ResponseEntity<String> login(User user) {
+    public ResponseEntity<String> login(User user, HttpSession session) {
         Optional<User> existingUser = userDao.findUserByEmail(user.getEmail());
         if (existingUser.isPresent()) {
             String hashedPassword = existingUser.get().getPassword();
             if (HashKeyword.check(user.getPassword(), hashedPassword)) {
+                session.setAttribute("AUTH.id", user.getId());
                 return ResponseEntity.ok("User Logged in successfully!");
             }
         }

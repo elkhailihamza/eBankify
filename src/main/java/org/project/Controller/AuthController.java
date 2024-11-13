@@ -1,5 +1,6 @@
 package org.project.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.project.Dto.request.AuthDto.LoginDto;
 import org.project.Dto.request.AuthDto.RegisterDto;
 import org.project.Entity.User;
@@ -21,9 +22,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         User user = authService.getLoginDtoToUser(loginDto);
-        return authService.login(user);
+        return authService.login(user, request.getSession());
     }
 
     @PostMapping("/register")
