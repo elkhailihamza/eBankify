@@ -29,4 +29,8 @@ public class InvoiceService {
     public InvoiceReqDto getInvoiceToInvoiceReqDto(Invoice invoice) {
         return InvoiceMapper.INSTANCE.getInvoiceToInvoiceReqDto(invoice);
     }
+
+    public Invoice saveInvoice(Invoice invoice) {
+        return invoiceDao.save(invoice);
+    }
 }
