@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
-    UserDao userDao;
+    private final UserDao userDao;
 
     @Autowired
     public AuthService(UserDao userDao) {
