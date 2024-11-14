@@ -1,7 +1,6 @@
 package org.project.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.project.Dto.request.AccountReqDto;
 import org.project.Dto.response.AccountResDto;
 import org.project.Entity.Account;
 import org.project.Entity.User;
