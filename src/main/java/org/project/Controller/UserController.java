@@ -1,5 +1,6 @@
 package org.project.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.project.Dto.request.UserReqDto;
 import org.project.Entity.Transaction;
 import org.project.Entity.User;
@@ -53,6 +54,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body("User modified: id - "+user.getId());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("An error has occurred!");
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        Optional<User> userOpt = userService.findUserById(userId);
+        if (userOpt.isPresent()) {
+            userService.deleteUser(userOpt.get());
+            return ResponseEntity.ok("Deleted User!");
+        }
+        return ResponseEntity.ok("Error has occured");
     }
 
 }
