@@ -1,6 +1,5 @@
 package org.project.Service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.project.Dao.UserDao;
 import org.project.Dto.request.AuthDto.LoginDto;
@@ -16,9 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-
-// COMPLETE LATER
-
 @Service
 public class AuthService {
     UserDao userDao;
@@ -29,11 +25,11 @@ public class AuthService {
     }
 
     public User getLoginDtoToUser(LoginDto loginDto) {
-        return UserMapper.INSTANCE.loginDtoToUser(loginDto);
+        return UserMapper.INSTANCE.toUser(loginDto);
     }
 
     public User getRegisterDtoToUser(RegisterDto registerDto) {
-        return UserMapper.INSTANCE.registerDtoToUser(registerDto);
+        return UserMapper.INSTANCE.toUser(registerDto);
     }
 
     public ResponseEntity<String> register(User user) {

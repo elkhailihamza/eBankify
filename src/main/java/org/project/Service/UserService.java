@@ -1,6 +1,8 @@
 package org.project.Service;
 
 import org.project.Dao.UserDao;
+import org.project.Dto.Mapper.UserMapper;
+import org.project.Dto.request.UserReqDto;
 import org.project.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,10 @@ public class UserService {
     @Autowired
     public UserService(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    public User toUser(UserReqDto userReqDto) {
+        return UserMapper.INSTANCE.toUser(userReqDto);
     }
 
     public Optional<User> findUserById(long id) {
