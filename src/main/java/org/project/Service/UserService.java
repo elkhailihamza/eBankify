@@ -37,4 +37,8 @@ public class UserService {
     public boolean userExistsById(long id) {
         return userDao.existsById(id);
     }
+
+    public boolean userExistsByEmail(String email) {
+        return userDao.existsUserByEmail(email);
+    }
 }
