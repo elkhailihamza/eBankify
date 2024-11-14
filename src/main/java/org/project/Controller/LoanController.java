@@ -1,14 +1,14 @@
 package org.project.Controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.project.Dto.response.LoanResDto;
 import org.project.Entity.Loan;
+import org.project.Entity.User;
 import org.project.Service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -44,5 +44,11 @@ public class LoanController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Loan not found!");
     }
 
-
+    @PostMapping("/request")
+    public ResponseEntity<?> requestLoan(@RequestBody LoanResDto loanResDto, HttpServletRequest request) {
+        Long userId = (Long) request.getSession(false).getAttribute("AUTH.id");
+        Loan loan = loanService.toLoan(loanResDto);
+        loan.setOwner(User.builder().id(userId).build());
+        loanService.saveLoan(loan);
+    }
 }
