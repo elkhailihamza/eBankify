@@ -3,12 +3,12 @@ package org.project.Controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.project.Dto.request.TransactionReqDto;
-import org.project.Dto.response.TransactionResDto;
 import org.project.Entity.Account;
 import org.project.Entity.Transaction;
 import org.project.Entity.User;
 import org.project.Enum.AccountStatus;
 import org.project.Enum.TransactionStatus;
+import org.project.Enum.TransactionType;
 import org.project.Service.AccountService;
 import org.project.Service.TransactionService;
 import org.project.Service.UserService;
@@ -46,25 +46,32 @@ public class TransactionController {
         Optional<Account> srcAccountOpt = accountService.fetchAccountByAccountNumber(srcAccount.getAccountNumber());
         Optional<Account> destAccountOpt = accountService.fetchAccountByAccountNumber(destAccount.getAccountNumber());
 
-        if (srcAccountOpt.isPresent() && destAccountOpt.isPresent()) {
-            srcAccount = srcAccountOpt.get();
-            destAccount = destAccountOpt.get();
-
-            if (srcAccount.getStatus() == AccountStatus.BLOCKED || destAccount.getStatus() == AccountStatus.BLOCKED || srcAccount.getOwner().getId() != userId) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Transaction creation failed!");
-            }
-
-            if (srcAccount.getBalance() >= transaction.getAmount()) {
-                transaction.setStatus(TransactionStatus.PENDING);
-                transaction.setSourceAccount(srcAccount);
-                transaction.setDestinationAccount(destAccount);
-                transactionService.saveTransaction(transaction);
-                return ResponseEntity.ok("Transaction created!");
-            } else {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Insufficient Funds!");
-            }
+        if (srcAccountOpt.isEmpty() || destAccountOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("An error has occurred!");
         }
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("An error has occurred!");
+
+        srcAccount = srcAccountOpt.get();
+        destAccount = destAccountOpt.get();
+
+        if (srcAccount.getStatus() == AccountStatus.BLOCKED || destAccount.getStatus() == AccountStatus.BLOCKED || srcAccount.getOwner().getId() != userId) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Transaction creation failed!");
+        }
+
+        if (srcAccount.getBalance() < transaction.getAmount()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Insufficient Funds!");
+        }
+
+        transaction.setStatus(transaction.getAmount() > 3000 ? TransactionStatus.PENDING : TransactionStatus.ACCEPTED);
+        transaction.setType(TransactionType.INSTANT);
+        transaction.setSourceAccount(srcAccount);
+        transaction.setDestinationAccount(destAccount);
+        transaction = transactionService.saveTransaction(transaction);
+
+        if (transaction.getStatus() == TransactionStatus.ACCEPTED) {
+            acceptTransaction(transaction.getId());
+        }
+
+        return ResponseEntity.ok("Transaction created!");
     }
 
     @PostMapping("/{transactionId}/accept")
