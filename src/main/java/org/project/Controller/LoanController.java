@@ -50,5 +50,6 @@ public class LoanController {
         Loan loan = loanService.toLoan(loanResDto);
         loan.setOwner(User.builder().id(userId).build());
         loanService.saveLoan(loan);
+        return ResponseEntity.ok("Loan created");
     }
 }
