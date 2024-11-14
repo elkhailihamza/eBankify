@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LoanService {
@@ -45,11 +46,19 @@ public class LoanService {
 
     public Loan acceptLoan(Loan loan) {
         loan.setApproved(true);
-        return loanDao.save(loan);
+        return saveLoan(loan);
     }
 
     public Loan refuseLoan(Loan loan) {
         loan.setApproved(false);
+        return saveLoan(loan);
+    }
+
+    public Optional<Loan> findById(long id) {
+        return loanDao.findById(id);
+    }
+
+    public Loan saveLoan(Loan loan) {
         return loanDao.save(loan);
     }
 }
