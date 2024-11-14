@@ -119,4 +119,17 @@ public class TransactionController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getTransactionHistory() {
+        List<Transaction> transactions = transactionService.getAllTransactionHistory();
+        if (!transactions.isEmpty()) {
+            List<TransactionViewModel> transactionViewModels = transactions.stream()
+                    .map(transactionService::getTransactionToTransactionResDto)
+                    .map(TransactionViewModel::new).toList();
+
+            return ResponseEntity.ok(transactionViewModels);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction list is empty!");
+    }
 }
