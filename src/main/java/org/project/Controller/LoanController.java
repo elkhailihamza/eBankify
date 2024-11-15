@@ -5,11 +5,13 @@ import org.project.Dto.response.LoanResDto;
 import org.project.Entity.Loan;
 import org.project.Entity.User;
 import org.project.Service.LoanService;
+import org.project.viewmodel.LoanViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -51,5 +53,24 @@ public class LoanController {
         loan.setOwner(User.builder().id(userId).build());
         loanService.saveLoan(loan);
         return ResponseEntity.ok("Loan created");
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> viewUserLoan(HttpServletRequest request) {
+        Long userId = (Long) request.getSession(false).getAttribute("AUTH.id");
+        List<Loan> loans = loanService.getUserLoanHistory(userId);
+        List<LoanViewModel> loanViewModels = loans.stream().map(loanService::getLoanToLoanResDto)
+                .map(LoanViewModel::new)
+                .toList();
+        return ResponseEntity.ok(loanViewModels);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> viewAllLoans() {
+        List<Loan> loans = loanService.getLoanHistory();
+        List<LoanViewModel> loanViewModels = loans.stream().map(loanService::getLoanToLoanResDto)
+                .map(LoanViewModel::new)
+                .toList();
+        return ResponseEntity.ok(loanViewModels);
     }
 }
