@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1730364185043-1
+      id: 1731334944557-1
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -15,15 +15,23 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  constraints:
+                    nullable: false
                   name: name
                   type: VARCHAR(255)
               - column:
+                  constraints:
+                    nullable: false
                   name: surname
                   type: VARCHAR(255)
               - column:
+                  constraints:
+                    nullable: false
                   name: email
                   type: VARCHAR(255)
               - column:
+                  constraints:
+                    nullable: false
                   name: password
                   type: VARCHAR(255)
               - column:
@@ -46,7 +54,7 @@ databaseChangeLog:
                   type: SMALLINT
             tableName: user
   - changeSet:
-      id: 1730364185043-2
+      id: 1731334944557-2
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -61,6 +69,8 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  constraints:
+                    nullable: false
                   name: amount_due
                   type: VARCHAR(255)
               - column:
@@ -71,7 +81,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: invoice
   - changeSet:
-      id: 1730364185043-3
+      id: 1731334944557-3
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -110,7 +120,7 @@ databaseChangeLog:
                   type: BOOLEAN
             tableName: loan
   - changeSet:
-      id: 1730364185043-4
+      id: 1731334944557-4
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -124,6 +134,8 @@ databaseChangeLog:
                   name: id
                   type: UUID
               - column:
+                  constraints:
+                    nullable: false
                   name: account_number
                   type: VARCHAR(255)
               - column:
@@ -142,7 +154,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: account
   - changeSet:
-      id: 1730364185043-5
+      id: 1731334944557-5
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -165,28 +177,26 @@ databaseChangeLog:
                   name: amount
                   type: DOUBLE
               - column:
-                  name: source_account_id_id
+                  name: source_account_id
                   type: UUID
               - column:
-                  name: destination_account_id_id
+                  name: destination_account_id
                   type: UUID
               - column:
                   name: status
                   type: SMALLINT
             tableName: transaction
   - changeSet:
-      id: 1730364185043-6
+      id: 1731334944557-6
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: owner_id
-            baseTableName: account
-            constraintName: FK_ACCOUNT_ON_OWNER
-            referencedColumnNames: id
-            referencedTableName: user
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: uc_user_email
+            tableName: user
   - changeSet:
-      id: 1730364185043-7
+      id: 1731334944557-7
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -197,7 +207,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
   - changeSet:
-      id: 1730364185043-8
+      id: 1731334944557-8
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -208,25 +218,45 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
   - changeSet:
-      id: 1730364185043-9
+      id: 1731334944557-9
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: account_number
+            constraintName: uc_account_accountnumber
+            tableName: account
+  - changeSet:
+      id: 1731334944557-10
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: destination_account_id_id
+            baseColumnNames: owner_id
+            baseTableName: account
+            constraintName: FK_ACCOUNT_ON_OWNER
+            referencedColumnNames: id
+            referencedTableName: user
+  - changeSet:
+      id: 1731334944557-11
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: destination_account_id
             baseTableName: transaction
-            constraintName: FK_TRANSACTION_ON_DESTINATIONACCOUNTID
+            constraintName: FK_TRANSACTION_ON_DESTINATIONACCOUNT
             referencedColumnNames: id
             referencedTableName: account
   - changeSet:
-      id: 1730364185043-10
+      id: 1731334944557-12
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addForeignKeyConstraint:
-            baseColumnNames: source_account_id_id
+            baseColumnNames: source_account_id
             baseTableName: transaction
-            constraintName: FK_TRANSACTION_ON_SOURCEACCOUNTID
+            constraintName: FK_TRANSACTION_ON_SOURCEACCOUNT
             referencedColumnNames: id
             referencedTableName: account
 

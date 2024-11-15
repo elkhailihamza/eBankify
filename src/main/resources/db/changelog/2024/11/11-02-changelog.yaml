@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1731338633619-1
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: SMALLINT
+            columnName: role
+            tableName: user
+            validate: true
+  - changeSet:
+      id: 1731338633619-2
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addDefaultValue:
+            columnDataType: smallint
+            columnName: role
+            defaultValueNumeric: '2'
+            tableName: user
+  - changeSet:
+      id: 1731338633619-3
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: SMALLINT
+            columnName: status
+            tableName: account
+            validate: true
+  - changeSet:
+      id: 1731338633619-4
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addDefaultValue:
+            columnDataType: smallint
+            columnName: status
+            defaultValueNumeric: '1'
+            tableName: account
+  - changeSet:
+      id: 1731338633619-5
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addNotNullConstraint:
+            columnDataType: SMALLINT
+            columnName: status
+            tableName: transaction
+            validate: true
+  - changeSet:
+      id: 1731338633619-6
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addDefaultValue:
+            columnDataType: smallint
+            columnName: status
+            defaultValueNumeric: '1'
+            tableName: transaction
+
