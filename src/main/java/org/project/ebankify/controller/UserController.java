@@ -3,7 +3,6 @@ package org.project.ebankify.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.project.ebankify.dto.request.UserReqDto;
 import org.project.ebankify.entity.User;
-import org.project.ebankify.service.TransactionService;
 import org.project.ebankify.service.UserService;
 import org.project.ebankify.util.HashKeyword;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,10 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
-    private final TransactionService transactionService;
     private final UserService userService;
 
     @Autowired
-    public UserController(TransactionService transactionService, UserService userService) {
-        this.transactionService = transactionService;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

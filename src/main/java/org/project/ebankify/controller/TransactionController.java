@@ -37,21 +37,17 @@ public class TransactionController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createNewTransaction(@RequestBody TransactionReqDto transactionReqDto, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("AUTH.id");
+        Long userId = (Long) request.getSession().getAttribute("AUTH.id");
         Transaction transaction = transactionService.toTransaction(transactionReqDto);
-        Account srcAccount = transaction.getSourceAccount();
-        Account destAccount = transaction.getDestinationAccount();
-
-        Optional<Account> srcAccountOpt = accountService.fetchAccountByAccountNumber(srcAccount.getAccountNumber());
-        Optional<Account> destAccountOpt = accountService.fetchAccountByAccountNumber(destAccount.getAccountNumber());
+        Optional<Account> srcAccountOpt = accountService.fetchAccountByAccountNumber(transaction.getSourceAccount().getAccountNumber());
+        Optional<Account> destAccountOpt = accountService.fetchAccountByAccountNumber(transaction.getDestinationAccount().getAccountNumber());
 
         if (srcAccountOpt.isEmpty() || destAccountOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("An error has occurred!");
         }
 
-        srcAccount = srcAccountOpt.get();
-        destAccount = destAccountOpt.get();
+        Account srcAccount = srcAccountOpt.get();
+        Account destAccount = destAccountOpt.get();
 
         if (srcAccount.getStatus() == AccountStatus.BLOCKED || destAccount.getStatus() == AccountStatus.BLOCKED || srcAccount.getOwner().getId() != userId) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Transaction creation failed!");
@@ -65,8 +61,8 @@ public class TransactionController {
         transaction.setType(TransactionType.INSTANT);
         transaction.setSourceAccount(srcAccount);
         transaction.setDestinationAccount(destAccount);
-        transaction = transactionService.saveTransaction(transaction);
 
+        transaction = transactionService.saveTransaction(transaction);
         if (transaction.getStatus() == TransactionStatus.ACCEPTED) {
             acceptTransaction(transaction.getId());
         }
@@ -108,28 +104,22 @@ public class TransactionController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             List<Transaction> transactionHistory = transactionService.getUserTransactionHistory(user);
-            if (!transactionHistory.isEmpty()) {
-                List<TransactionVM> transactionVMList = transactionHistory.stream()
-                        .map(transactionService::getTransactionToTransactionResDto)
-                        .map(TransactionVM::new).toList();
+            List<TransactionVM> transactionVMList = transactionHistory.stream()
+                    .map(transactionService::getTransactionToTransactionResDto)
+                    .map(TransactionVM::new).toList();
 
-                return ResponseEntity.ok(transactionVMList);
-            }
-            return ResponseEntity.ok("Transaction history is empty!");
+            return ResponseEntity.ok(transactionVMList);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getTransactionHistory() {
+    public ResponseEntity<List<TransactionVM>> getTransactionHistory() {
         List<Transaction> transactions = transactionService.getAllTransactionHistory();
-        if (!transactions.isEmpty()) {
-            List<TransactionVM> transactionVMs = transactions.stream()
-                    .map(transactionService::getTransactionToTransactionResDto)
-                    .map(TransactionVM::new).toList();
+        List<TransactionVM> transactionVMs = transactions.stream()
+                .map(transactionService::getTransactionToTransactionResDto)
+                .map(TransactionVM::new).toList();
 
-            return ResponseEntity.ok(transactionVMs);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction list is empty!");
+        return ResponseEntity.ok(transactionVMs);
     }
 }
