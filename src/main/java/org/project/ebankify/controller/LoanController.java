@@ -20,7 +20,6 @@ import java.util.Optional;
 public class LoanController {
     private final LoanService loanService;
 
-    @Autowired
     public LoanController(LoanService loanService) {
         this.loanService = loanService;
     }

@@ -15,7 +15,6 @@ public class UserService {
 
     private final UserDao userDao;
 
-    @Autowired
     public UserService(UserDao userDao) {
         this.userDao = userDao;
     }
@@ -28,20 +27,12 @@ public class UserService {
         return userDao.findById(id);
     }
 
-    public List<User> fetchAllUsers() {
-        return userDao.findAll();
-    }
-
     public User saveUser(User user) {
         return userDao.save(user);
     }
 
     public void deleteUser(User user) {
         userDao.delete(user);
-    }
-
-    public boolean userExistsById(long id) {
-        return userDao.existsById(id);
     }
 
     public boolean userExistsByEmail(String email) {

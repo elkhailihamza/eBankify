@@ -17,13 +17,8 @@ public class TransactionService {
 
     private final TransactionDao transactionDao;
 
-    @Autowired
     public TransactionService(TransactionDao transactionDao) {
         this.transactionDao = transactionDao;
-    }
-
-    public Transaction toTransaction(TransactionResDto transactionResDto) {
-        return TransactionMapper.INSTANCE.toTransaction(transactionResDto);
     }
 
     public Transaction toTransaction(TransactionReqDto transactionReqDto) {
@@ -32,10 +27,6 @@ public class TransactionService {
 
     public TransactionResDto getTransactionToTransactionResDto(Transaction transaction) {
         return TransactionMapper.INSTANCE.getTransactionToTransactionResDto(transaction);
-    }
-
-    public TransactionReqDto getTransactionToTransactionReqDto(Transaction transaction) {
-        return TransactionMapper.INSTANCE.getTransactionToTransactionReqDto(transaction);
     }
 
     public Optional<Transaction> findTransactionById(long id) {

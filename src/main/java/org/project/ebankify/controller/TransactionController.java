@@ -31,7 +31,6 @@ public class TransactionController {
     private final AccountService accountService;
     private final UserService userService;
 
-    @Autowired
     public TransactionController(TransactionService transactionService, AccountService accountService, UserService userService) {
         this.transactionService = transactionService;
         this.accountService = accountService;

@@ -21,7 +21,6 @@ import java.util.Optional;
 public class AuthService {
     private final UserDao userDao;
 
-    @Autowired
     public AuthService(UserDao userDao) {
         this.userDao = userDao;
     }

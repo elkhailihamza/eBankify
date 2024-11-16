@@ -17,17 +17,8 @@ import java.util.Random;
 public class AccountService {
     private final AccountDao accountDao;
 
-    @Autowired
     public AccountService(AccountDao accountDao) {
         this.accountDao = accountDao;
-    }
-
-    public Account toAccount(AccountReqDto accountReqDto) {
-        return AccountMapper.INSTANCE.toAccount(accountReqDto);
-    }
-
-    public AccountReqDto getAccountToAccountReqDto(Account account) {
-        return AccountMapper.INSTANCE.getAccountToAccountCreateDto(account);
     }
 
     public AccountResDto getAccountToAccountResDto(Account account) {

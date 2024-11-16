@@ -15,13 +15,8 @@ import java.util.Optional;
 public class LoanService {
     private final LoanDao loanDao;
 
-    @Autowired
     public LoanService(LoanDao loanDao) {
         this.loanDao = loanDao;
-    }
-
-    public Loan toLoan(LoanReqDto loanReqDto) {
-        return LoanMapper.INSTANCE.toLoan(loanReqDto);
     }
 
     public Loan toLoan(LoanResDto loanResDto) {
@@ -30,10 +25,6 @@ public class LoanService {
 
     public LoanResDto getLoanToLoanResDto(Loan loan) {
         return LoanMapper.INSTANCE.getLoanToLoanResDto(loan);
-    }
-
-    public LoanReqDto getLoanToLoanReqDto(Loan loan) {
-        return LoanMapper.INSTANCE.getLoanToLoanReqDto(loan);
     }
 
     public List<Loan> getLoanHistory() {

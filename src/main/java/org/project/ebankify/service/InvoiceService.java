@@ -15,25 +15,12 @@ import java.util.Optional;
 public class InvoiceService {
     private final InvoiceDao invoiceDao;
 
-    @Autowired
     public InvoiceService(InvoiceDao invoiceDao) {
         this.invoiceDao = invoiceDao;
     }
 
-    public Optional<Invoice> getInvoiceById(long id) {
-        return invoiceDao.findById(id);
-    }
-
     public Invoice toInvoice(InvoiceReqDto invoiceReqDto) {
         return InvoiceMapper.INSTANCE.toInvoice(invoiceReqDto);
-    }
-
-    public Invoice toInvoice(InvoiceResDto invoiceResDto) {
-        return InvoiceMapper.INSTANCE.toInvoice(invoiceResDto);
-    }
-
-    public InvoiceReqDto getInvoiceToInvoiceReqDto(Invoice invoice) {
-        return InvoiceMapper.INSTANCE.getInvoiceToInvoiceReqDto(invoice);
     }
 
     public InvoiceResDto getInvoiceToInvoiceResDto(Invoice invoice) {
