@@ -8,7 +8,6 @@ import org.project.ebankify.exception.EntityDataConflictException;
 import org.project.ebankify.exception.UnexpectedErrorException;
 import org.project.ebankify.service.UserService;
 import org.project.ebankify.util.HashKeyword;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
