@@ -10,9 +10,5 @@ import org.project.ebankify.entity.Account;
 public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-    Account toAccount(AccountReqDto accountReqDto);
-    Account toAccount(AccountResDto accountResDto);
-
-    AccountReqDto getAccountToAccountCreateDto(Account account);
     AccountResDto getAccountToAccountViewDto(Account account);
 }

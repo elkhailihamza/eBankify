@@ -10,9 +10,7 @@ import org.project.ebankify.entity.Loan;
 public interface LoanMapper {
     LoanMapper INSTANCE = Mappers.getMapper(LoanMapper.class);
 
-    Loan toLoan(LoanReqDto loanReqDto);
     Loan toLoan(LoanResDto loanResDto);
 
     LoanResDto getLoanToLoanResDto(Loan loan);
-    LoanReqDto getLoanToLoanReqDto(Loan loan);
 }

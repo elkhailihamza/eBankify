@@ -6,6 +6,7 @@ import org.project.ebankify.dto.request.authdto.LoginDto;
 import org.project.ebankify.dto.request.authdto.RegisterDto;
 import org.project.ebankify.dto.request.UserReqDto;
 import org.project.ebankify.entity.User;
+import org.springframework.stereotype.Component;
 
 @Mapper
 public interface UserMapper {
@@ -14,7 +15,4 @@ public interface UserMapper {
     User toUser(RegisterDto registerDto);
     User toUser(LoginDto loginDto);
     User toUser (UserReqDto userReqDto);
-
-    LoginDto userToLoginDto(User user);
-    RegisterDto userToRegisterDto(User user);
 }

@@ -10,9 +10,7 @@ import org.project.ebankify.entity.Transaction;
 public interface TransactionMapper {
     TransactionMapper INSTANCE = Mappers.getMapper(TransactionMapper.class);
 
-    Transaction toTransaction(TransactionResDto transactionResDto);
     Transaction toTransaction(TransactionReqDto transactionReqDto);
 
     TransactionResDto getTransactionToTransactionResDto(Transaction transaction);
-    TransactionReqDto getTransactionToTransactionReqDto(Transaction transaction);
 }

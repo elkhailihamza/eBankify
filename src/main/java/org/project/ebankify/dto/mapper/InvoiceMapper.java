@@ -16,11 +16,5 @@ public interface InvoiceMapper {
     @Mapping(source = "owner", target = "owner")
     Invoice toInvoice(InvoiceReqDto invoiceReqDto);
 
-    @Mapping(source = "amountDue", target = "amountDue")
-    @Mapping(source = "dueDate", target = "dueDate")
-    @Mapping(source = "owner", target = "owner")
-    Invoice toInvoice(InvoiceResDto invoiceResDto);
-
-    InvoiceReqDto getInvoiceToInvoiceReqDto(Invoice invoice);
     InvoiceResDto getInvoiceToInvoiceResDto(Invoice invoice);
 }
