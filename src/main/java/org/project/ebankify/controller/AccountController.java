@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.project.ebankify.dto.response.AccountResDto;
 import org.project.ebankify.entity.Account;
 import org.project.ebankify.entity.User;
-import org.project.ebankify.exceptions.InvalidFundsException;
+import org.project.ebankify.exception.InvalidFundsException;
 import org.project.ebankify.type.AccountStatus;
 import org.project.ebankify.service.AccountService;
 import org.project.ebankify.service.UserService;

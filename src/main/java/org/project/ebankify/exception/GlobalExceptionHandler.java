@@ -1,4 +1,4 @@
-package org.project.ebankify.exceptions;
+package org.project.ebankify.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

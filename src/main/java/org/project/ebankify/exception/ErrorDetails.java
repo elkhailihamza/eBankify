@@ -1,4 +1,4 @@
-package org.project.ebankify.exceptions;
+package org.project.ebankify.exception;
 
 import lombok.Data;
 

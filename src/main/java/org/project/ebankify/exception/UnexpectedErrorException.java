@@ -1,4 +1,4 @@
-package org.project.ebankify.exceptions;
+package org.project.ebankify.exception;
 
 public class UnexpectedErrorException extends RuntimeException {
     public UnexpectedErrorException(String message) {

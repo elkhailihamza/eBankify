@@ -1,4 +1,4 @@
-package org.project.ebankify.exceptions;
+package org.project.ebankify.exception;
 
 public class EntityDataConflictException extends RuntimeException {
     public EntityDataConflictException(String message) {
