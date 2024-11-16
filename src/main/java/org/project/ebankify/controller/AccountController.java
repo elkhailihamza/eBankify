@@ -1,9 +1,11 @@
 package org.project.ebankify.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.project.ebankify.dto.response.AccountResDto;
 import org.project.ebankify.entity.Account;
 import org.project.ebankify.entity.User;
+import org.project.ebankify.exceptions.InvalidFundsException;
 import org.project.ebankify.type.AccountStatus;
 import org.project.ebankify.service.AccountService;
 import org.project.ebankify.service.UserService;
@@ -32,15 +34,12 @@ public class AccountController {
         Optional<User> owner = userService.findUserById(userId);
         if (owner.isPresent()) {
             List<Account> userAccounts = accountService.fetchAllUserAccounts(owner.get());
-            if (!userAccounts.isEmpty()) {
-                List<AccountVM> accountVMs = userAccounts.stream()
-                        .map(accountService::getAccountToAccountResDto)
-                        .map(AccountVM::new).toList();
-                return ResponseEntity.ok(accountVMs);
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+            List<AccountVM> accountVMs = userAccounts.stream()
+                    .map(accountService::getAccountToAccountResDto)
+                    .map(AccountVM::new).toList();
+            return ResponseEntity.ok(accountVMs);
         }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No accounts found!");
+        throw new EntityNotFoundException("User not found!");
     }
 
     @PostMapping("/create")
@@ -51,14 +50,14 @@ public class AccountController {
             User existingUser = user.get();
             int creditScore = existingUser.getCreditScore();
             if (creditScore < 600) {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Credit Score too low! \nNeeds to be 600 or more.");
+                throw new InvalidFundsException("Credit Score too low! \nNeeds to be 600 or more.");
             }
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new AccountVM(accountService.getAccountToAccountResDto(
                             accountService.createAccount(new Account(), 16))));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Doesn't exist!");
+        throw new EntityNotFoundException("User not found!");
     }
 
     @PostMapping("/{accountNumber}/disable")
@@ -71,7 +70,7 @@ public class AccountController {
 
             return ResponseEntity.ok("Account - "+accountNumber+" Blocked!");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account specified not found!");
+        throw new EntityNotFoundException("Account specified not found!");
     }
 
     @GetMapping("/{accountNumber}/view")
@@ -81,7 +80,7 @@ public class AccountController {
             AccountResDto accountResDto = accountService.getAccountToAccountResDto(account.get());
             return ResponseEntity.ok(new AccountVM(accountResDto));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found!");
+        throw new EntityNotFoundException("Account specified not found!");
     }
 
     @PostMapping("/{accountNumber}/delete")
@@ -91,6 +90,6 @@ public class AccountController {
             accountService.deleteAccount(account.get());
             return ResponseEntity.ok("Successfully deleted account!");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found!");
+        throw new EntityNotFoundException("Account specified not found!");
     }
 }

@@ -1,11 +1,15 @@
 package org.project.ebankify.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.project.ebankify.dto.request.TransactionReqDto;
 import org.project.ebankify.entity.Account;
 import org.project.ebankify.entity.Transaction;
 import org.project.ebankify.entity.User;
+import org.project.ebankify.exceptions.EntityCRUDFailedException;
+import org.project.ebankify.exceptions.InvalidFundsException;
+import org.project.ebankify.exceptions.UnexpectedErrorException;
 import org.project.ebankify.type.AccountStatus;
 import org.project.ebankify.type.TransactionStatus;
 import org.project.ebankify.type.TransactionType;
@@ -43,18 +47,19 @@ public class TransactionController {
         Optional<Account> destAccountOpt = accountService.fetchAccountByAccountNumber(transaction.getDestinationAccount().getAccountNumber());
 
         if (srcAccountOpt.isEmpty() || destAccountOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("An error has occurred!");
+            throw new UnexpectedErrorException("An error has occurred!");
         }
 
         Account srcAccount = srcAccountOpt.get();
         Account destAccount = destAccountOpt.get();
 
         if (srcAccount.getStatus() == AccountStatus.BLOCKED || destAccount.getStatus() == AccountStatus.BLOCKED || srcAccount.getOwner().getId() != userId) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Transaction creation failed!");
+            throw new EntityCRUDFailedException("Transaction creation failed!");
+
         }
 
         if (srcAccount.getBalance() < transaction.getAmount()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Insufficient Funds!");
+            throw new InvalidFundsException("Insufficient Funds!");
         }
 
         transaction.setStatus(transaction.getAmount() > 3000 ? TransactionStatus.PENDING : TransactionStatus.ACCEPTED);
@@ -81,7 +86,7 @@ public class TransactionController {
             transactionService.saveTransaction(transaction);
             return ResponseEntity.ok("Transaction accepted!");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not found!");
+        throw new EntityNotFoundException("Transaction not found!");
     }
 
     @PostMapping("/{transactionId}/refuse")
@@ -93,7 +98,7 @@ public class TransactionController {
             transactionService.saveTransaction(transaction);
             return ResponseEntity.ok("Transaction refused!");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not found!");
+        throw new EntityNotFoundException("Transaction not found!");
     }
 
     @GetMapping("/")
@@ -110,7 +115,7 @@ public class TransactionController {
 
             return ResponseEntity.ok(transactionVMList);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+        throw new EntityNotFoundException("User not found!");
     }
 
     @GetMapping("/all")

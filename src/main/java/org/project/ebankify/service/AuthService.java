@@ -6,6 +6,8 @@ import org.project.ebankify.dto.request.authdto.LoginDto;
 import org.project.ebankify.dto.request.authdto.RegisterDto;
 import org.project.ebankify.dto.mapper.UserMapper;
 import org.project.ebankify.entity.User;
+import org.project.ebankify.exceptions.EntityDataConflictException;
+import org.project.ebankify.exceptions.UnexpectedErrorException;
 import org.project.ebankify.type.Role;
 import org.project.ebankify.util.HashKeyword;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,7 @@ public class AuthService {
 
             return ResponseEntity.status(HttpStatus.CREATED).body("User Created successfully!");
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists!");
+        throw new EntityDataConflictException("Email already exists!");
     }
 
     public ResponseEntity<String> login(User user, HttpSession session) {
@@ -55,6 +57,6 @@ public class AuthService {
                 return ResponseEntity.ok("User Logged in successfully!");
             }
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong credentials!");
+        throw new UnexpectedErrorException("Wrong credentials!");
     }
 }

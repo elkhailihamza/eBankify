@@ -1,8 +1,11 @@
 package org.project.ebankify.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.project.ebankify.dto.request.UserReqDto;
 import org.project.ebankify.entity.User;
+import org.project.ebankify.exceptions.EntityDataConflictException;
+import org.project.ebankify.exceptions.UnexpectedErrorException;
 import org.project.ebankify.service.UserService;
 import org.project.ebankify.util.HashKeyword;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,7 @@ public class UserController {
             user = userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body("User created: id - "+user.getId());
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("User with same email already exists!");
+        throw new EntityDataConflictException("User with same email already exists!");
     }
 
     @PostMapping("/update/{userId}")
@@ -47,7 +50,7 @@ public class UserController {
             user = userService.saveUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body("User modified: id - "+user.getId());
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("An error has occurred!");
+        throw new UnexpectedErrorException("An error has occurred!");
     }
 
     @PostMapping("/delete")
@@ -58,7 +61,7 @@ public class UserController {
             userService.deleteUser(userOpt.get());
             return ResponseEntity.ok("Deleted User!");
         }
-        return ResponseEntity.ok("Error has occured");
+        throw new EntityNotFoundException("User not found!");
     }
 
 }

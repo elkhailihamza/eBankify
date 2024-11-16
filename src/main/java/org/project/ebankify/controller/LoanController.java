@@ -1,5 +1,6 @@
 package org.project.ebankify.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.project.ebankify.dto.response.LoanResDto;
 import org.project.ebankify.entity.Loan;
@@ -32,7 +33,7 @@ public class LoanController {
             loanService.acceptLoan(loan);
             return ResponseEntity.ok("Accepted loan!");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Loan not found!");
+        throw new EntityNotFoundException("Loan not found!");
     }
 
     @PostMapping("/{loanId}/refuse")
